@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: fals
+
+    Sau\WP\Theme\:
+        resource: '../src/*'
+        exclude: '../src/{Kernel.php,Console}'
+
+    extension.twig:
+        class: Sau\WP\Theme\DependencyInjection\TwigExtension
+        tags:
+            - { name: compiler.pass }
+
+
+        tags: ['app.custom_tag']

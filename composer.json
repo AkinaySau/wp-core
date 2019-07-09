@@ -1,0 +1,24 @@
+{
+	"name": "sau/wp-theme",
+	"description": "Theme v3",
+	"minimum-stability": "stable",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Akinay Sau (Vladimir M)",
+			"email": "akinay.sau@gmail.com"
+		}
+	],
+	"require": {
+		"symfony/console": "^4.3",
+		"symfony/dependency-injection": "^4.3",
+		"symfony/yaml": "^4.3",
+		"symfony/config": "^4.3",
+		"symfony/var-dumper": "4.3.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Sau\\WP\\Theme\\": "src"
+		}
+	}
+}
