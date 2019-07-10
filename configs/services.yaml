@@ -4,14 +4,14 @@ services:
         autoconfigure: true
         public: fals
 
-    Sau\WP\Theme\:
+    Sau\WP\Core\:
         resource: '../src/*'
-        exclude: '../src/{Kernel.php,Console}'
+        exclude: '../src/{Kernel.php,Bundle}'
 
-    extension.twig:
-        class: Sau\WP\Theme\DependencyInjection\TwigExtension
-        tags:
-            - { name: compiler.pass }
-
-
-        tags: ['app.custom_tag']
+#    extension.twig:
+#        class: Sau\WP\Core\DependencyInjection\TwigExtension
+#        tags:
+#            - { name: extencion }
+    Sau\WP\Core\Templating\Templating:
+        arguments:
+            - "%path.base.views%"
