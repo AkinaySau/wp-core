@@ -18,8 +18,16 @@ class TemplatingExtension implements ExtensionInterface, CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $definition = new Definition(Templating::class);
-        $container->setDefinition('templating', $definition);
+        //$definition = new Definition(Templating::class);
+        //$container->setDefinition('templating', $definition);
+        //$templating = $definition->addMethodCall('getTemplating');
+
+        $templating = new Templating($container->getParameter('path.base.views'));
+
+        $container->ali
+        dump($templating);
+            die();
+        $container->set('templating', $templating);
     }
 
     /**

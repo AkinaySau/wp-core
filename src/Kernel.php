@@ -5,6 +5,7 @@ namespace Sau\WP\Core;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -12,8 +13,9 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class Kernel
 {
     private $base_path;
+
     /**
-     * @var void
+     * @var ContainerInterface
      */
     private $container;
     private $debug;
@@ -79,7 +81,7 @@ class Kernel
         return $this->debug;
     }
 
-    private function initContainer()
+    private function initContainer(): ContainerInterface
     {
         $file                 = $this->getCachePath().'/container.php';
         $containerConfigCache = new ConfigCache($file, $this->isDebug());
@@ -116,18 +118,14 @@ class Kernel
         $container = new \SauWPCoreCachedContainer();
 
         return $container;
-        //        $containerBuilder->registerExtension(new TwigExtension());
     }
 
     public function run()
     {
-//        $this->container;
         dump(
             $this->container->getParameterBag(),
             $this->container->getServiceIds(),
-//            $this->container->getExtensions(),
-//            $this->container->getDefinitions()
-        );
+            );
         die();
 
     }
@@ -184,5 +182,14 @@ class Kernel
             }
         }
 
+    }
+
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
     }
 }
