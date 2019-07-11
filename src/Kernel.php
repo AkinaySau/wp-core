@@ -100,11 +100,6 @@ class Kernel
             //load services
             $this->loadServicesConfig($containerBuilder);
 
-            //        foreach ($containerBuilder->findTaggedServiceIds('compiler.pass') as $pass) {
-            //            $containerBuilder->addCompilerPass($pass);
-            //        }
-
-
             $containerBuilder->compile();
 
             $dumper = new PhpDumper($containerBuilder);
@@ -159,10 +154,10 @@ class Kernel
         $containerBuilder->setParameter('path.core.config', $this->getCoreConfigPath());
 
         $containerBuilder->setParameter('path.base', $this->getBasePath());
-        $containerBuilder->setParameter('path.base.config', $this->getConfigPath());
-        $containerBuilder->setParameter('path.base.var', $this->getVarPath());
-        $containerBuilder->setParameter('path.base.cache', $this->getCachePath());
-        $containerBuilder->setParameter('path.base.views', $this->getViewsPath());
+        $containerBuilder->setParameter('path.config', $this->getConfigPath());
+        $containerBuilder->setParameter('path.var', $this->getVarPath());
+        $containerBuilder->setParameter('path.cache', $this->getCachePath());
+        $containerBuilder->setParameter('path.views', $this->getViewsPath());
     }
 
     public function installTemplate()

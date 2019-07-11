@@ -6,12 +6,4 @@ services:
 
     Sau\WP\Core\:
         resource: '../src/*'
-        exclude: '../src/{Kernel.php,Bundle}'
-
-#    extension.twig:
-#        class: Sau\WP\Core\DependencyInjection\TwigExtension
-#        tags:
-#            - { name: extencion }
-    Sau\WP\Core\Templating\Templating:
-        arguments:
-            - "%path.base.views%"
+        exclude: '../src/{Kernel.php,Twig/TwigEngine.php}'
