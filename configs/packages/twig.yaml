@@ -1,0 +1,8 @@
+twig:
+    #charset:
+    #base_template_class:
+    #cache:
+    auto_reload: true
+    #strict_variables:
+    #autoescape:
+    #optimizations:

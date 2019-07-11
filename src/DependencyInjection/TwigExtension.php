@@ -2,7 +2,9 @@
 
 namespace Sau\WP\Core\DependencyInjection;
 
+use Sau\WP\Core\DependencyInjection\Configuration\TwigConfiguration;
 use Sau\WP\Core\Twig\TwigEngine;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -17,26 +19,16 @@ class TwigExtension implements ExtensionInterface, CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         // TODO: Add configuration
-        $configs = [
-            //'debug'               => true,
-            //'charset'             => '',
-            //'base_template_class' => '',
-            'cache'         => $container->getParameter('path.cache').'/twig',
-            'auto_reload'   => true,
-            //'strict_variables'    => '',
-            //'autoescape'          => '',
-            'optimizations' => -1,
-        ];
 
-        $definition = new Definition(TwigEngine::class, ['%path.views%', $configs]);
-        $definition->setPublic(true);
+
+        $definition = $container->getDefinition('twig');
+
 
         $definition->addMethodCall(
             'registerExtensions',
             [$container->findTaggedServiceIds('twig.extension')]
         );
 
-        $container->setDefinition('twig', $definition);
     }
 
     /**
@@ -46,8 +38,27 @@ class TwigExtension implements ExtensionInterface, CompilerPassInterface
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = new TwigConfiguration();
+        $processor     = new Processor();
+        $configs        = $processor->processConfiguration($configuration, $configs);
+//        $configs = [
+//            //'debug'               => true,
+//            //'charset'             => '',
+//            //'base_template_class' => '',
+//            'cache'         => $container->getParameter('path.cache').'/twig',
+//            'auto_reload'   => true,
+//            //'strict_variables'    => '',
+//            //'autoescape'          => '',
+//            'optimizations' => -1,
+//        ];
+
         $container->registerForAutoconfiguration(\Twig\Extension\ExtensionInterface::class)
                   ->addTag('twig.extension');
+
+        $definition = new Definition(TwigEngine::class, ['%path.views%', $configs]);
+        $definition->setPublic(true);
+        $container->setDefinition('twig', $definition);
+
     }
 
     /**
