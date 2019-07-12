@@ -6,6 +6,7 @@ namespace Sau\WP\Core\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Twig\Template;
 
 class TwigConfiguration implements ConfigurationInterface
 {
@@ -21,13 +22,40 @@ class TwigConfiguration implements ConfigurationInterface
         $rootNode    = $treeBuilder->getRootNode();
 
         $rootNode->children()
-                     ->booleanNode('auto_connect')
-                     ->defaultTrue()
-                 ->end()
-                 ->scalarNode('default_connection')
-                     ->defaultValue('default')
-                    ->end()
-                 ->end();
+            ->booleanNode('debug')
+                ->defaultValue('%debug%')
+            ->end()
+            ->scalarNode('charset')
+                ->defaultValue('utf-8')
+            ->end()
+            ->scalarNode('base_template_class')
+                ->defaultValue(Template::class)
+            ->end()
+            //todo need add validate for cache node (false or string)
+            ->scalarNode('cache')
+                /*
+                ->validate()
+                    ->ifTrue(function ($var){
+                        if ($var!==false || !is_string($var) )
+                            return false;
+                        return true;
+                    })
+                ->end()
+                */
+                ->defaultValue("%path.cache%/twig")
+            ->end()
+            ->booleanNode('auto_reload')
+                ->defaultTrue()
+            ->end()
+            ->booleanNode('strict_variables')
+                ->defaultTrue()
+            ->end()
+            ->scalarNode('autoescape')
+            ->end()
+            ->integerNode('optimizations')
+                ->defaultValue(-1)
+            ->end()
+        ->end();
 
         return $treeBuilder;
     }

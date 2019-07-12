@@ -2,8 +2,12 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: fals
+        public: false
 
     Sau\WP\Core\:
         resource: '../src/*'
-        exclude: '../src/{Kernel.php,Twig/TwigEngine.php}'
+        exclude: '../src/{Kernel.php,Twig/TwigEngine.php,Carbon/Carbon.php}'
+    twig:
+        class: Sau\WP\Core\Twig\Template
+        arguments: ['@twig_engine']
+        public: true

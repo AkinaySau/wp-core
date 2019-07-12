@@ -18,8 +18,9 @@ class Template
 
     public function render($name, array $parameters = [])
     {
-        $this->twig->render($name, $parameters);
+        return $this->twig->render($name, $parameters);
     }
+
     public function display($name, array $parameters = [])
     {
         $this->twig->display($name, $parameters);

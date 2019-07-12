@@ -1,8 +1,2 @@
 twig:
-    #charset:
-    #base_template_class:
-    #cache:
-    auto_reload: true
-    #strict_variables:
-    #autoescape:
-    #optimizations:
+   #See https://twig.symfony.com/doc/2.x/api.html#environment-options

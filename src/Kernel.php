@@ -107,17 +107,16 @@ class Kernel
 
     private function initContainer()
     {
-        $file         = $this->getCachePath().'/container.php';
-        $cache        = new ConfigCache($file, $this->isDebug());
+        $file  = $this->getCachePath().'/container.php';
+        $cache = new ConfigCache($file, $this->isDebug());
 
         if ( ! $fresh = $cache->isFresh()) {
             $container = $this->buildContainer();
 
-            $loader = $this->getContainerLoader($container);
-            $this->registerConfiguration($container, $loader);
-
             $this->registerCoreExtensions($container);
 
+            $loader = $this->getContainerLoader($container);
+            $this->registerConfiguration($container, $loader);
 
             $container->compile();
             $dumper = new PhpDumper($container);
@@ -128,39 +127,8 @@ class Kernel
         }
 
         require_once $file;
-        $container = new \SauWPCoreCachedContainer();
-
-
-        /*
-        if ($cache->isFresh()) {
-            include $cache->getPath();
-        } else {
-            $containerBuilder = new ContainerBuilder();
-
-            //register default path
-            $this->registerDefaultPaths($containerBuilder);
-
-            //configs
-            $loader = $this->getContainerLoader($containerBuilder);
-            $this->registerConfiguration($containerBuilder, $loader);
-
-            $this->registerCoreExtensions($containerBuilder);
-
-            //$this->registerConfiguration($containerBuilder);
-
-
-            $containerBuilder->compile();
-
-            $dumper = new PhpDumper($containerBuilder);
-            $cache->write(
-                $dumper->dump(['class' => 'SauWPCoreCachedContainer']),
-                $containerBuilder->getResources()
-            );
-        }
-
-        require_once $file;
-        $container = new \SauWPCoreCachedContainer();
-        */
+        $className = $this->getContainerClass();
+        $container = new $className();
 
         return $container;
     }
@@ -185,7 +153,7 @@ class Kernel
     {
         $container = new ContainerBuilder();
         $container->getParameterBag()
-                  ->add($this->getDefaultPaths());
+                  ->add($this->getDefaultParams());
 
         return $container;
     }
@@ -193,23 +161,25 @@ class Kernel
 
     public function run()
     {
+        $container = $this->getContainer();
+        if ($container->has('carbon')) {
+            $this->container->get('carbon');
+        }
+        $this->inicialize($container);
 
-        dump(
-            $this->container->getParameterBag(),
-            $this->container->getServiceIds(),
-            );
-        //        die();
+        dump($container->initialized('carbon'));
+        include $this->getCorePath().'/functions.php';
 
     }
 
     private function registerConfiguration(ContainerBuilder $containerBuilder, LoaderInterface $loader)
     {
         //base services
-        $loader->load($this->getCoreConfigPath().'/{packages}/*'.self::CONFIG_EXTS,'glob');
-        $loader->load($this->getCoreConfigPath().'/{services}'.self::CONFIG_EXTS,'glob');
+        $loader->load($this->getCoreConfigPath().'/{packages}/*'.self::CONFIG_EXTS, 'glob');
+        $loader->load($this->getCoreConfigPath().'/{services}'.self::CONFIG_EXTS, 'glob');
 
-        $loader->load($this->getConfigPath().'/{packages}/*'.self::CONFIG_EXTS,'glob');
-        $loader->load($this->getConfigPath().'/{services}'.self::CONFIG_EXTS,'glob');
+        $loader->load($this->getConfigPath().'/{packages}/*'.self::CONFIG_EXTS, 'glob');
+        $loader->load($this->getConfigPath().'/{services}'.self::CONFIG_EXTS, 'glob');
 
         //$loader->load($this->getConfigPath().'/{packages}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
         //$loader->load($this->getConfigPath().'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
@@ -221,9 +191,11 @@ class Kernel
          */
     }
 
-    private function getDefaultPaths()
+    private function getDefaultParams()
     {
         return [
+            'debug' => $this->isDebug(),
+
             'path.core'        => $this->getCorePath(),
             'path.core.config' => $this->getCoreConfigPath(),
             'path.base'        => $this->getBasePath(),
