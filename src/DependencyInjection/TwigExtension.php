@@ -8,9 +8,10 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
-class TwigExtension implements ExtensionInterface, CompilerPassInterface
+class TwigExtension extends Extension implements CompilerPassInterface
 {
 
     /**
@@ -38,19 +39,9 @@ class TwigExtension implements ExtensionInterface, CompilerPassInterface
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+
         $configuration = new TwigConfiguration();
-        $processor     = new Processor();
-        $configs        = $processor->processConfiguration($configuration, $configs);
-//        $configs = [
-//            //'debug'               => true,
-//            //'charset'             => '',
-//            //'base_template_class' => '',
-//            'cache'         => $container->getParameter('path.cache').'/twig',
-//            'auto_reload'   => true,
-//            //'strict_variables'    => '',
-//            //'autoescape'          => '',
-//            'optimizations' => -1,
-//        ];
+        $configs       = $this->processConfiguration($configuration, $configs);
 
         $container->registerForAutoconfiguration(\Twig\Extension\ExtensionInterface::class)
                   ->addTag('twig.extension');
@@ -93,4 +84,8 @@ class TwigExtension implements ExtensionInterface, CompilerPassInterface
         return 'twig';
     }
 
+    //    public function getConfiguration(array $config, ContainerBuilder $container)
+    //    {
+    //        return new TwigConfiguration();
+    //    }
 }
