@@ -4,26 +4,23 @@ namespace Sau\WP\Core\DependencyInjection;
 
 use Sau\WP\Core\DependencyInjection\Configuration\TwigConfiguration;
 use Sau\WP\Core\Twig\TwigEngine;
-use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Twig\Extension\ExtensionInterface;
 
 class TwigExtension extends Extension implements CompilerPassInterface
 {
 
     /**
      * You can modify the container here before it is dumped to PHP code.
+     *
+     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        // TODO: Add configuration
-
-
-        $definition = $container->getDefinition('twig');
-
+        $definition = $container->getDefinition('twig_engine');
 
         $definition->addMethodCall(
             'registerExtensions',
@@ -35,7 +32,8 @@ class TwigExtension extends Extension implements CompilerPassInterface
     /**
      * Loads a specific configuration.
      *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
+     * @param array            $configs
+     * @param ContainerBuilder $container
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -43,12 +41,11 @@ class TwigExtension extends Extension implements CompilerPassInterface
         $configuration = new TwigConfiguration();
         $configs       = $this->processConfiguration($configuration, $configs);
 
-        $container->registerForAutoconfiguration(\Twig\Extension\ExtensionInterface::class)
+        $container->registerForAutoconfiguration(ExtensionInterface::class)
                   ->addTag('twig.extension');
 
         $definition = new Definition(TwigEngine::class, ['%path.views%', $configs]);
-        $definition->setPublic(true);
-        $container->setDefinition('twig', $definition);
+        $container->setDefinition('twig_engine', $definition);
 
     }
 
@@ -83,9 +80,4 @@ class TwigExtension extends Extension implements CompilerPassInterface
     {
         return 'twig';
     }
-
-    //    public function getConfiguration(array $config, ContainerBuilder $container)
-    //    {
-    //        return new TwigConfiguration();
-    //    }
 }

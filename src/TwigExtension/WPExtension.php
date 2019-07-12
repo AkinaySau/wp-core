@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Sau\WP\Core\Twig;
+namespace Sau\WP\Core\TwigExtension;
 
 
 use Twig\Extension\AbstractExtension;
