@@ -168,8 +168,6 @@ class Kernel
         $init = $container->get('initialize');
         $init->init($container);
 
-        dump($container->initialized('carbon'));
-
         include $this->getCorePath().'/functions.php';
 
     }
@@ -248,8 +246,8 @@ class Kernel
     private function checkInfrastructure()
     {
         $fs = new Filesystem();
-        $fs->mkdir($this->getBasePath().'/configs', 0644);
-        $fs->mkdir($this->getBasePath().'/views', 0644);
+        $fs->mkdir($this->getBasePath().'/configs', 0755);
+        $fs->mkdir($this->getBasePath().'/views', 0755);
     }
 
 }
