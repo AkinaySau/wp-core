@@ -9,14 +9,13 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
 use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\DependencyInjection\Loader\IniFileLoader;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Filesystem;
@@ -39,6 +38,7 @@ class Kernel
         $this->base_path = $theme_dir;
         $this->debug     = $debug;
 
+        $this->checkInfrastructure();
         $this->container = $this->initContainer();
     }
 
@@ -162,12 +162,14 @@ class Kernel
     public function run()
     {
         $container = $this->getContainer();
-        if ($container->has('carbon')) {
-            $this->container->get('carbon');
+        if ( ! $container->has('initialize')) {
+            throw new ServiceNotFoundException('initialize');
         }
-        $this->inicialize($container);
+        $init = $container->get('initialize');
+        $init->init($container);
 
         dump($container->initialized('carbon'));
+
         include $this->getCorePath().'/functions.php';
 
     }
@@ -180,15 +182,6 @@ class Kernel
 
         $loader->load($this->getConfigPath().'/{packages}/*'.self::CONFIG_EXTS, 'glob');
         $loader->load($this->getConfigPath().'/{services}'.self::CONFIG_EXTS, 'glob');
-
-        //$loader->load($this->getConfigPath().'/{packages}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
-        //$loader->load($this->getConfigPath().'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
-        /*
-         * $loader = new YamlFileLoader(
-         *      $containerBuilder, new FileLocator($this->getConfigPath())
-         * );
-         *    $loader->load('services.yaml');
-         */
     }
 
     private function getDefaultParams()
@@ -250,6 +243,13 @@ class Kernel
         );
 
         return new DelegatingLoader($resolver);
+    }
+
+    private function checkInfrastructure()
+    {
+        $fs = new Filesystem();
+        $fs->mkdir($this->getBasePath().'/configs', 0644);
+        $fs->mkdir($this->getBasePath().'/views', 0644);
     }
 
 }
