@@ -4,18 +4,24 @@
 namespace Sau\WP\Core\Carbon;
 
 
-use Carbon_Fields\Block;
-use Carbon_Fields\Container\Container;
-use Sau\WP\Core\Twig\TwigEngine;
-use Sau\WP\Theme\Extension\Carbon\CarbonActions;
+use Sau\WP\Core\Twig\Template;
 
-abstract class GutenbergBlock implements CarbonInitInterface
+abstract class GutenbergBlock extends Container
 {
     protected $twig;
 
-    public function __construct(TwigEngine $twig)
+    public function __construct(Template $twig)
     {
         $this->twig = $twig;
+    }
+
+    /**
+     * Register as block
+     * @return string
+     */
+    final public function getType(): string
+    {
+        return ContainerType::BLOCK;
     }
 
     /**
@@ -26,30 +32,31 @@ abstract class GutenbergBlock implements CarbonInitInterface
 
     abstract function getTemplate(): string;
 
-    /**
-     * block for smart configure
-     */
-    public function options()
+    final public function init(): void
     {
+        parent::init();
+        $this->container->set_render_callback(
+            function ($fields, $attributes, $inner_blocks) {
+                //todo: add inner_blocks
+                echo $this->twig->render($fields, $attributes);
+            }
+        )
+                        ->set_preview_mode($this->getPreviewMod())
+                        ->add_fields($this->getFields());
     }
 
-    public function init()
-    {
-        $block = Block::make($this->getTitle());
-        $block->set_render_callback(
-                function ($fields, $attributes, $inner_blocks) {
-                    echo $this->render($fields, $attributes, $inner_blocks);
-                }
-            )
-              ->set_preview_mode($this->getPreviewMod())
-              ->add_fields($this->getFields());
-        $this->options($block);
+    /**
+     * Fields for this block
+     * @return array
+     */
+    abstract public function getFields(): array;
 
-        $obj = static::class;
-        /*CarbonActions::carbonFieldsRegisterFields(
-            function () use ($title, &$obj) {*/
-        $obj = new $obj($title);
-        //            }
-        //        );
+    /**
+     * Setup preview mod
+     * @return bool
+     */
+    protected function getPreviewMod(): bool
+    {
+        return false;
     }
 }

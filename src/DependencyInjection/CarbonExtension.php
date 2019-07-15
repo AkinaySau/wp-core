@@ -2,9 +2,10 @@
 
 namespace Sau\WP\Core\DependencyInjection;
 
-use Sau\WP\Core\Carbon\Carbon;
 use Sau\WP\Core\Carbon\Container;
+use Sau\WP\Core\Carbon\ContainerInterface;
 use Sau\WP\Core\Carbon\GutenbergBlock;
+use Sau\WP\Core\DependencyInjection\Collector\CarbonCollector;
 use Sau\WP\Core\DependencyInjection\Configuration\CarbonConfiguration;
 use Sau\WP\Core\Twig\TwigEngine;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -14,23 +15,19 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 
 class CarbonExtension extends Extension implements CompilerPassInterface
 {
+    /**
+     * @var array
+     */
+    private $configs;
 
     /**
      * You can modify the container here before it is dumped to PHP code.
      */
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('carbon');
-
-        $definition->addMethodCall(
-            'registerContainers',
-            [$container->findTaggedServiceIds('twig.extension')]
-        );
-        $definition->addMethodCall(
-            'registerBlock',
-            [$container->findTaggedServiceIds('twig.extension')]
-        );
-
+        $containers = $container->findTaggedServiceIds('carbon.container');
+        $definition = new Definition(CarbonCollector::class, [$this->configs, $containers]);
+        $container->setDefinition('carbon_collector', $definition);
     }
 
     /**
@@ -43,20 +40,13 @@ class CarbonExtension extends Extension implements CompilerPassInterface
 
         $configuration = new CarbonConfiguration();
         $configs       = $this->processConfiguration($configuration, $configs);
-
+        $this->configs = $configs;
         /* todo add widget
         $container->registerForAutoconfiguration(BaseWidget::class)
                   ->addTag('carbon.widget');
         */
-        $container->registerForAutoconfiguration(Container::class)
+        $container->registerForAutoconfiguration(ContainerInterface::class)
                   ->addTag('carbon.container');
-        $container->registerForAutoconfiguration(GutenbergBlock::class)
-                  ->addTag('carbon.block');
-
-        $definition = new Definition(Carbon::class);
-        $definition->setPublic(true);
-        $container->setDefinition('carbon', $definition);
-
     }
 
     /**

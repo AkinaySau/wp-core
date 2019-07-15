@@ -8,53 +8,57 @@
 
 namespace Sau\WP\Core\Carbon;
 
+use Carbon_Fields\Container\Container as CarbonBaseContainer;
 
-use Carbon_Fields\Carbon_Fields\Container\Container as CrbBaseContainer;
-use Sau\WP\Theme\Extension\Carbon\CarbonActions;
+abstract class Container implements ContainerInterface
+{
+    /**
+     * @return string
+     * @see ContainerType for get types
+     */
+    abstract public function getType(): string;
 
-abstract class Container {
-	protected $container;
+    abstract public function getTitle(): string;
 
-	/**
-	 * Create container
-	 *
-	 * @param string $type  Container type maybe: post_meta, term_meta, user_meta, theme_options, comment_meta, nav_menu_item
-	 * @param string $title Title for container
-	 * @return void
-	 */
-	public static function init ( $type, $title ) {
-		$obj = static::class;
-		CarbonActions::carbonFieldsRegisterFields(function () use ( $type, $title, &$obj ) {
-			$obj = new $obj($type, $title);
-		});
-	}
+    /**
+     * @var CarbonBaseContainer
+     */
+    protected $container;
 
-	/**
-	 * Container constructor.
-	 *
-	 * @param string $type  Type container
-	 * @param string $title Title
-	 */
-	final protected function __construct ( $type, $title ) {
-		$this->container = Container::make($type, $title);
-		$this->addFields();
-	}
+    /**
+     * Create container
+     *
+     * @param string $type  Container type maybe: post_meta, term_meta, user_meta, theme_options, comment_meta, nav_menu_item
+     * @param string $title Title for container
+     *
+     * @return void
+     */
+    public function init():void
+    {
+        $container = CarbonBaseContainer::factory($this->getType(), $this->getTitle());
+        $this->configure($container);
+        $this->container = $container;
+    }
 
+    /**
+     * Return container
+     *
+     * @return CarbonBaseContainer
+     */
+    public function getContainer(): CarbonBaseContainer
+    {
+        return $this->container;
+    }
 
-	/**
-	 * Return container
-	 *
-	 * @return CrbBaseContainer
-	 */
-	public function getContainer (): CrbBaseContainer {
-		return $this->container;
-	}
-
-	/**
-	 * Add custom fields
-	 *
-	 * @return void
-	 */
-	abstract protected function addFields ();
+    /**
+     * Use this function for configure container
+     *
+     * @param CarbonBaseContainer $container
+     *
+     * @return mixed
+     */
+    protected function configure(CarbonBaseContainer $container)
+    {
+    }
 
 }
