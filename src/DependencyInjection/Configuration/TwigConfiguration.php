@@ -56,7 +56,12 @@ class TwigConfiguration implements ConfigurationInterface
                 ->defaultValue(-1)
             ->end()
             ->arrayNode('environments')
-                ->scalarPrototype()->end()
+                ->arrayPrototype()
+                    ->children()
+                        ->scalarNode('namespace')->isRequired()->end()
+                        ->scalarNode('path')->isRequired()->end()
+                    ->end()
+                ->end()
             ->end()
         ->end();
 

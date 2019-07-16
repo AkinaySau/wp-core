@@ -58,8 +58,8 @@ final class TwigEngine
     {
         if ( ! $this->environment instanceof Environment) {
             $loader = new FilesystemLoader();
-            foreach ($this->configs[ 'environments' ] as $namespace => $path) {
-                $loader->addPath($path, $namespace);
+            foreach ($this->configs[ 'environments' ] as $item) {
+                $loader->addPath($item[ 'path' ], $item[ 'namespace' ]);
             }
             $this->environment = new Environment(
                 $loader, $this->configs

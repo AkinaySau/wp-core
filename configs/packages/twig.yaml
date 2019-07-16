@@ -1,4 +1,4 @@
 twig:
     #See https://twig.symfony.com/doc/2.x/api.html#environment-options
     environments:
-        s_core: '%path.views%'
+        - {namespace: 's-core',path: '%path.views%'}

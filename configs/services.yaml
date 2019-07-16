@@ -7,12 +7,18 @@ services:
     Sau\WP\Core\:
         resource: '../src/*'
         exclude: '../src/{Kernel.php,Twig/TwigEngine.php,Carbon/Carbon.php}'
-    twig:
-        class: Sau\WP\Core\Twig\Twig
-        public: true
+    #Twig
+    Sau\WP\Core\Twig\Twig:
+        public: false
         arguments: ['@twig_engine']
-
-    carbon:
-        class: Sau\WP\Core\Carbon\Carbon
+    twig:
+        alias: Sau\WP\Core\Twig\Twig
         public: true
+
+    #Carbon
+    Sau\WP\Core\Carbon\Carbon:
+        public: false
         arguments: ['@service_container','@carbon_collector','@twig']
+    carbon:
+        alias: Sau\WP\Core\Carbon\Carbon
+        public: true

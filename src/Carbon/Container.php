@@ -9,6 +9,9 @@
 namespace Sau\WP\Core\Carbon;
 
 use Carbon_Fields\Container\Container as CarbonBaseContainer;
+use ChangeCase\ChangeCase;
+use ReflectionClass;
+use ReflectionException;
 
 abstract class Container implements ContainerInterface
 {
@@ -28,14 +31,12 @@ abstract class Container implements ContainerInterface
     /**
      * Create container
      *
-     * @param string $type  Container type maybe: post_meta, term_meta, user_meta, theme_options, comment_meta, nav_menu_item
-     * @param string $title Title for container
-     *
      * @return void
+     * @throws ReflectionException
      */
-    public function init():void
+    public function init(): void
     {
-        $container = CarbonBaseContainer::factory($this->getType(), $this->getTitle());
+        $container = CarbonBaseContainer::factory($this->getType(), $this->getContainerID(), $this->getTitle());
         $this->configure($container);
         $this->container = $container;
     }
@@ -59,6 +60,18 @@ abstract class Container implements ContainerInterface
      */
     protected function configure(CarbonBaseContainer $container)
     {
+    }
+
+    /**
+     * @return string
+     * @throws ReflectionException
+     */
+    public function getContainerID(): string
+    {
+        $reflect = new ReflectionClass($this);
+
+        return ChangeCase::kebab($reflect->getShortName());
+
     }
 
 }

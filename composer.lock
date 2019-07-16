@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b738d126918300e59810b57ca6e1d134",
+    "content-hash": "126acd2d848f41c4b23b1ecbe2992855",
     "packages": [
         {
             "name": "htmlburger/carbon-fields",
@@ -187,6 +187,67 @@
                 "psr"
             ],
             "time": "2017-02-14T16:28:37+00:00"
+        },
+        {
+            "name": "ptrkcsk/change-case",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ptrkcsk/change-case.git",
+                "reference": "d9b23f48129c743cd34beeaf632a98aa48f7ff98"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ptrkcsk/change-case/zipball/d9b23f48129c743cd34beeaf632a98aa48f7ff98",
+                "reference": "d9b23f48129c743cd34beeaf632a98aa48f7ff98",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7"
+            },
+            "require-dev": {
+                "phpdocumentor/phpdocumentor": "^2.9",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ChangeCase\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Patrik Csak",
+                    "email": "patrik@csak.email"
+                }
+            ],
+            "description": "Convert strings to camelCase, CONSTANT_CASE, dot.case, Header-Case, lower case, param case, PascalCase, path/case, Sentence case, snake_case, Title Case, UPPER CASE, and more!",
+            "homepage": "https://github.com/ptrkcsk/change-case",
+            "keywords": [
+                "camel case",
+                "case",
+                "change case",
+                "constant case",
+                "dot case",
+                "header case",
+                "kebab case",
+                "lower case",
+                "lower case first",
+                "param case",
+                "pascale case",
+                "path case",
+                "sentence case",
+                "snake case",
+                "title case",
+                "upper camel case",
+                "upper case",
+                "upper case first"
+            ],
+            "time": "2018-08-13T15:19:37+00:00"
         },
         {
             "name": "symfony/config",

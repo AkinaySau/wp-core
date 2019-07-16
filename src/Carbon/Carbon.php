@@ -5,6 +5,7 @@ namespace Sau\WP\Core\Carbon;
 
 
 use Carbon_Fields\Carbon_Fields;
+use ChangeCase\ChangeCase;
 use Sau\WP\Core\DependencyInjection\Collector\CarbonCollector;
 use Sau\WP\Core\Twig\Twig;
 
@@ -58,14 +59,28 @@ class Carbon
             'carbon_fields_register_fields',
             function () {
                 foreach ($this->collector->getContainers() as $id => $params) {
-//                    $this->container->get($id);
-                    //                    $container = new $class();
-                    //                    if ($container->getType() === ContainerType::BLOCK) {
-                    //                      $this->container->setTemplater(Template $twig)
-                    //                        $this->blocks[] = $container->getTitle();
-                    //                    }
-                    //                    $container->init();
+                    $this->container->get($id)
+                                    ->init();
                 }
+            }
+        );
+        add_filter(
+            'allowed_block_types',
+            function () {
+                $blocks    = [];
+                foreach ($this->collector->getContainers() as $id => $params) {
+                    $container = $this->container->get($id);
+                    if ($container->getType() === ContainerType::BLOCK) {
+                        //todo: непредвиденная странность, почемуто добавляется суфикс блок для блока гутенберга, надо проверить
+                        $blocks[] = sprintf(
+                            '%s/%s',
+                            'carbon-fields',
+                            ChangeCase::kebab($container->getTitle().'-block')
+                        );
+                    }
+                }
+                return $blocks;
+
             }
         );
     }
