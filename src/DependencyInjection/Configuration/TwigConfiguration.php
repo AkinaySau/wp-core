@@ -55,6 +55,9 @@ class TwigConfiguration implements ConfigurationInterface
             ->integerNode('optimizations')
                 ->defaultValue(-1)
             ->end()
+            ->arrayNode('environments')
+                ->scalarPrototype()->end()
+            ->end()
         ->end();
 
         return $treeBuilder;
