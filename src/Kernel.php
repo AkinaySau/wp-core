@@ -32,6 +32,7 @@ class Kernel
 
 
     const CONFIG_EXTS = '.{yaml,yml}';
+    const VERSION     = '1.0.0';
 
     public function __construct(string $theme_dir, $debug = true)
     {
