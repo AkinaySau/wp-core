@@ -22,3 +22,7 @@ services:
     carbon:
         alias: Sau\WP\Core\Carbon\Carbon
         public: true
+
+    #Console
+    Sau\WP\Core\Console\Console:
+        arguments: ['@service_container','@carbon_collector']
