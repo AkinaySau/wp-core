@@ -6,7 +6,7 @@ namespace Sau\WP\Core\Carbon;
 
 use Carbon_Fields\Carbon_Fields;
 use Sau\WP\Core\DependencyInjection\Collector\CarbonCollector;
-use Sau\WP\Core\Twig\Template;
+use Sau\WP\Core\Twig\Twig;
 
 class Carbon
 {
@@ -25,14 +25,14 @@ class Carbon
      */
     protected $blocks = [];
     /**
-     * @var Template
+     * @var Twig
      */
     private $template;
 
     public function __construct(
         \Symfony\Component\DependencyInjection\ContainerInterface $container,
         CarbonCollector $collector,
-        Template $template
+        Twig $template
     ) {
 
         $this->container = $container;
@@ -58,13 +58,13 @@ class Carbon
             'carbon_fields_register_fields',
             function () {
                 foreach ($this->collector->getContainers() as $id => $params) {
-                    $this->container->get($id);
-                    /*$container = new $class();
-                    if ($container->getType() === ContainerType::BLOCK) {
-                      $this->container->setTemplater(Template $twig)
-                        $this->blocks[] = $container->getTitle();
-                    }
-                    $container->init();*/
+//                    $this->container->get($id);
+                    //                    $container = new $class();
+                    //                    if ($container->getType() === ContainerType::BLOCK) {
+                    //                      $this->container->setTemplater(Template $twig)
+                    //                        $this->blocks[] = $container->getTitle();
+                    //                    }
+                    //                    $container->init();
                 }
             }
         );

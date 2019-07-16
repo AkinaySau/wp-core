@@ -26,6 +26,9 @@ class CarbonExtension extends Extension implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $containers = $container->findTaggedServiceIds('carbon.container');
+        foreach ($containers as $id=>$c) {
+            $container->getDefinition($id)->setPublic(true);
+        }
         $definition = new Definition(CarbonCollector::class, [$this->configs, $containers]);
         $container->setDefinition('carbon_collector', $definition);
     }

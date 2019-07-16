@@ -8,11 +8,11 @@ services:
         resource: '../src/*'
         exclude: '../src/{Kernel.php,Twig/TwigEngine.php,Carbon/Carbon.php}'
     twig:
-        class: Sau\WP\Core\Twig\Template
+        class: Sau\WP\Core\Twig\Twig
         public: true
         arguments: ['@twig_engine']
 
     carbon:
         class: Sau\WP\Core\Carbon\Carbon
         public: true
-        arguments: ['@service_container','@carbon_collector']
+        arguments: ['@service_container','@carbon_collector','@twig']

@@ -18,8 +18,7 @@
 		"twig/twig": "^2.11",
 		"symfony/templating": "^4.3",
 		"symfony/finder": "^4.3",
-		"htmlburger/carbon-fields": "^3.1",
-		"filp/whoops": "^2.4"
+		"htmlburger/carbon-fields": "^3.1"
 	},
 	"autoload": {
 		"psr-4": {

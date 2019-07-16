@@ -4,13 +4,13 @@
 namespace Sau\WP\Core\Carbon;
 
 
-use Sau\WP\Core\Twig\Template;
+use Sau\WP\Core\Twig\Twig;
 
 abstract class GutenbergBlock extends Container
 {
     protected $twig;
 
-    public function __construct(Template $twig)
+    public function __construct(Twig $twig)
     {
         $this->twig = $twig;
     }

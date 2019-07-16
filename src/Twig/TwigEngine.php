@@ -5,6 +5,7 @@ namespace Sau\WP\Core\Twig;
 
 
 use Twig\Environment;
+use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 
 final class TwigEngine
@@ -13,39 +14,32 @@ final class TwigEngine
     /**
      * @var Environment
      */
-    private $twig;
+    private $environment;
 
     private $isRegisteredExtensions = false;
+    /**
+     * @var array
+     */
+    private $configs;
+    /**
+     * @var array
+     */
+    private $extensions;
 
-    public function __construct($template_path, $configs = [])
+    public function __construct(array $configs)
     {
-        $loader = new FilesystemLoader();
-        $loader->addPath($template_path, 's-core');
-        $this->twig = new Environment(
-            $loader, $configs
-        );
+        $this->configs = $configs;
     }
 
-    public function registerExtensions($extensions)
+    public function registerExtensions()
     {
         if ($this->isRegisteredExtensions) {
             return;
         }
-        foreach ($extensions as $class => $extension) {
-            $this->twig->addExtension(new $class);
+        foreach ($this->extensions as $class => $extension) {
+            $this->environment->addExtension(new $class);
         }
         $this->isRegisteredExtensions = true;
-    }
-
-    public function render($name, array $parameters = [])
-    {
-        return $this->twig->render($name, $parameters);
-    }
-
-    public function display($name, array $parameters = [])
-    {
-        echo $this->render($name, $parameters);
-
     }
 
     /**
@@ -56,4 +50,43 @@ final class TwigEngine
         return $this->isRegisteredExtensions;
     }
 
+    /**
+     * @return Environment
+     * @throws LoaderError
+     */
+    public function getEnvironment()
+    {
+        if ( ! $this->environment instanceof Environment) {
+            $loader = new FilesystemLoader();
+            foreach ($this->configs[ 'environments' ] as $namespace => $path) {
+                $loader->addPath($path, $namespace);
+            }
+            $this->environment = new Environment(
+                $loader, $this->configs
+            );
+            $this->registerExtensions();
+        }
+
+        return $this->environment;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfigs(): array
+    {
+        return $this->configs;
+    }
+
+    /**
+     * @param array $extensions
+     *
+     * @return TwigEngine
+     */
+    public function setExtensions(array $extensions)
+    {
+        $this->extensions = $extensions;
+
+        return $this;
+    }
 }

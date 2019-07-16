@@ -3,6 +3,7 @@
 namespace Sau\WP\Core\DependencyInjection;
 
 use Sau\WP\Core\DependencyInjection\Configuration\TwigConfiguration;
+use Sau\WP\Core\Twig\Twig;
 use Sau\WP\Core\Twig\TwigEngine;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,7 +13,6 @@ use Twig\Extension\ExtensionInterface;
 
 class TwigExtension extends Extension implements CompilerPassInterface
 {
-
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
@@ -23,7 +23,7 @@ class TwigExtension extends Extension implements CompilerPassInterface
         $definition = $container->getDefinition('twig_engine');
 
         $definition->addMethodCall(
-            'registerExtensions',
+            'setExtensions',
             [$container->findTaggedServiceIds('twig.extension')]
         );
 
@@ -44,20 +44,8 @@ class TwigExtension extends Extension implements CompilerPassInterface
         $container->registerForAutoconfiguration(ExtensionInterface::class)
                   ->addTag('twig.extension');
 
-        $definition = new Definition(TwigEngine::class, ['%path.views%', $configs]);
+        $definition = new Definition(TwigEngine::class, [$configs]);
         $container->setDefinition('twig_engine', $definition);
 
-    }
-
-    /**
-     * Returns the recommended alias to use in XML.
-     *
-     * This alias is also the mandatory prefix to use when using YAML.
-     *
-     * @return string The alias
-     */
-    public function getAlias()
-    {
-        return 'twig';
     }
 }
