@@ -2,12 +2,9 @@
 
 namespace Sau\WP\Core\DependencyInjection;
 
-use Sau\WP\Core\Carbon\Container;
 use Sau\WP\Core\Carbon\ContainerInterface;
-use Sau\WP\Core\Carbon\GutenbergBlock;
 use Sau\WP\Core\DependencyInjection\Collector\CarbonCollector;
 use Sau\WP\Core\DependencyInjection\Configuration\CarbonConfiguration;
-use Sau\WP\Core\Twig\TwigEngine;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
