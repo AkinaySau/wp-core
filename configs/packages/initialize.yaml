@@ -1,2 +1,2 @@
 initialize:
-    auto_init: ['carbon','twig']
+    auto_init: ['carbon','twig','console']

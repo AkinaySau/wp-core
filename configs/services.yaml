@@ -25,4 +25,7 @@ services:
 
     #Console
     Sau\WP\Core\Console\Console:
-        arguments: ['@service_container','@carbon_collector']
+        arguments: ['@service_container','@console_collector']
+    console:
+        alias: Sau\WP\Core\Console\Console
+        public: true

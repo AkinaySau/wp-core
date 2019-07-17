@@ -23,12 +23,15 @@ class ConsoleExtension extends Extension implements CompilerPassInterface
 
     /**
      * You can modify the container here before it is dumped to PHP code.
+     *
+     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
         $commands   = $container->findTaggedServiceIds('console.command');
-        $definition = new Definition(ConsoleCollector::class, [$this->configs,$commands]);
-        $container->setDefinition('console.collector', $definition);
+        $definition = new Definition(ConsoleCollector::class, [$this->configs, $commands]);
+        $definition->setPublic(true);
+        $container->setDefinition('console_collector', $definition);
     }
 
     /**
@@ -43,7 +46,8 @@ class ConsoleExtension extends Extension implements CompilerPassInterface
         $this->configs = $this->processConfiguration($configuration, $configs);
 
         $container->registerForAutoconfiguration(Command::class)
-                  ->addTag('console.command');
+                  ->addTag('console.command')
+                  ->setPublic(true);
 
     }
 }

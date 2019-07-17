@@ -17,10 +17,23 @@ class ConsoleConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('carbon');
+        $treeBuilder = new TreeBuilder('console');
         $rootNode    = $treeBuilder->getRootNode();
 
         $rootNode->children()
+                    ->arrayNode('make')
+                        ->isRequired()
+                        ->children()
+                            ->scalarNode('namespace')
+                                ->info('Namespace project')
+                                ->isRequired()
+                            ->end()
+                            ->scalarNode('src')
+                                ->info('Source directory')
+                                ->isRequired()
+                            ->end()
+                        ->end()
+                     ->end()
                  ->end();
 
         return $treeBuilder;

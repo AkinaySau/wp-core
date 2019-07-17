@@ -19,7 +19,8 @@
 		"symfony/templating": "^4.3",
 		"symfony/finder": "^4.3",
 		"htmlburger/carbon-fields": "^3.1",
-		"ptrkcsk/change-case": "^0.1.0"
+		"ptrkcsk/change-case": "^0.1.0",
+		"nette/php-generator": "^3.2"
 	},
 	"autoload": {
 		"psr-4": {
