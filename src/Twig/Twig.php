@@ -13,7 +13,7 @@ class Twig
     /**
      * @var TwigEngine
      */
-    private $twig;
+    private $environment;
 
     /**
      * Twig constructor.
@@ -24,7 +24,7 @@ class Twig
      */
     public function __construct(TwigEngine $engine)
     {
-        $this->twig = $engine->getEnvironment();
+        $this->environment = $engine->getEnvironment();
     }
 
     /**
@@ -38,7 +38,7 @@ class Twig
      */
     public function render($name, array $parameters = [])
     {
-        return $this->twig->render($name, $parameters);
+        return $this->environment->render($name, $parameters);
     }
 
     /**
@@ -51,6 +51,6 @@ class Twig
      */
     public function display($name, array $parameters = [])
     {
-        $this->twig->display($name, $parameters);
+        $this->environment->display($name, $parameters);
     }
 }
