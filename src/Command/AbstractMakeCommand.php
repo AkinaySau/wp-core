@@ -6,14 +6,13 @@ namespace Sau\WP\Core\Command;
 
 use Exception;
 use Sau\WP\Core\Console\Console;
-use Sau\WP\Core\DependencyInjection\Collector\ConsoleCollector;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractMakeCommand extends Command
 {
@@ -43,11 +42,6 @@ abstract class AbstractMakeCommand extends Command
         $this->base_path = $this->container->getParameter('path.base');
     }
 
-    protected function configure()
-    {
-
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
@@ -59,7 +53,7 @@ abstract class AbstractMakeCommand extends Command
 
     }
 
-    abstract protected function make(InputInterface $input, OutputInterface $output, SymfonyStyle $io);
+    abstract protected function make(InputInterface $input, OutputInterface $output, StyleInterface $style);
 
     /**
      * @return ContainerInterface
