@@ -10,6 +10,7 @@ use Exception;
 use Nette\PhpGenerator\PhpNamespace;
 use Sau\WP\Core\Carbon\Container;
 use Sau\WP\Core\Carbon\ContainerType;
+use Sau\WP\Core\Traits\MakeClassTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class MakeCarbonContainerCommand extends AbstractMakeCommand
 {
     use MakeTrait;
+    use MakeClassTrait;
     protected static $defaultName = 'make:carbon:container';
 
     private $className;
@@ -32,7 +34,11 @@ class MakeCarbonContainerCommand extends AbstractMakeCommand
 
     protected function make(InputInterface $input, OutputInterface $output, SymfonyStyle $io)
     {
-        $asc          = $this->getBlockName($io);
+        $asc = $this->getBlockName($io);
+
+        dump($this->parseNamespace($asc));
+        die();
+
         $tmpNamespace = explode('\\', $asc);
 
         $title          = ChangeCase::upperFirst(ChangeCase::no($asc));
@@ -64,8 +70,7 @@ class MakeCarbonContainerCommand extends AbstractMakeCommand
         $class = $namespace->addClass($fullClass);
         $class->addExtend(Container::class);
 
-//        ask('sdfsdf',['sdf','sdf','sdf','sdf','sdf','sdf']);
-
+        //        ask('sdfsdf',['sdf','sdf','sdf','sdf','sdf','sdf']);
 
 
         $outputClass = '<?php'.PHP_EOL.$namespace;
@@ -150,4 +155,14 @@ class MakeCarbonContainerCommand extends AbstractMakeCommand
         return implode('\\', $tpl);
     }
 
+    /**
+     *
+     * Method for generate class or namespace
+     *
+     * @return string
+     */
+    public function generate(): string
+    {
+        return
+    }
 }
