@@ -66,8 +66,8 @@ class Carbon
         );
         add_filter(
             'allowed_block_types',
-            function ($blocks) {
-                $blocks    = [];
+            function () {
+                $blocks = [];
                 foreach ($this->collector->getContainers() as $id => $params) {
                     $container = $this->container->get($id);
                     if ($container->getType() === ContainerType::BLOCK) {
@@ -75,12 +75,12 @@ class Carbon
                         $blocks[] = sprintf(
                             '%s/%s',
                             'carbon-fields',
-                            ChangeCase::kebab($container->getContainerID())
+                            $container->getContainerID()
                         );
                     }
                 }
-                return $blocks;
 
+                return $blocks;
             }
         );
     }

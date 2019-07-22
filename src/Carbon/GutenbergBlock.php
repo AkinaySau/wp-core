@@ -38,6 +38,7 @@ abstract class GutenbergBlock extends Container
         $this->container->set_render_callback(
             function ($fields, $attributes, $inner_blocks) {
                 //todo: add inner_blocks
+                $fields[ 'inner_blocks' ] = $inner_blocks;
                 echo $this->twig->render($this->getTemplate(), $fields);
             }
         )
