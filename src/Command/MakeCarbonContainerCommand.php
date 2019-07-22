@@ -5,21 +5,16 @@ namespace Sau\WP\Core\Command;
 
 use Carbon_Fields\Container\Container as CarbonBaseContainer;
 use Carbon_Fields\Field;
-use ChangeCase\ChangeCase;
-use Exception;
 use Nette\PhpGenerator\PhpNamespace;
 use Sau\WP\Core\Carbon\Container;
 use Sau\WP\Core\Carbon\ContainerType;
-use Sau\WP\Core\Traits\MakeClassTrait;
-use Symfony\Component\Console\Command\Command;
+use Sau\WP\Core\Exceptions\BaseCoreException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Style\StyleInterface;
 
 class MakeCarbonContainerCommand extends AbstractMakeCommand
 {
-    use MakeTrait;
     use MakeClassTrait;
     protected static $defaultName = 'make:carbon:container';
 
@@ -32,137 +27,92 @@ class MakeCarbonContainerCommand extends AbstractMakeCommand
         $this->setDescription('Generate new carbon container');
     }
 
-    protected function make(InputInterface $input, OutputInterface $output, SymfonyStyle $io)
+    protected function make(InputInterface $input, OutputInterface $output, StyleInterface $style)
     {
-        $asc = $this->getBlockName($io);
+        $this->setProjectNamespace(trim($this->getConfigs()[ 'namespace' ], '\\').'\Carbon');
 
-        dump($this->parseNamespace($asc));
-        die();
+        $class = $this->creteClass($style);
 
-        $tmpNamespace = explode('\\', $asc);
-
-        $title          = ChangeCase::upperFirst(ChangeCase::no($asc));
-        $shortNamespace = $this->getShortNamespace($tmpNamespace);//valid
-        $namespace      = $this->getNamespace($shortNamespace);//valid
-        $class          = $this->getClass($tmpNamespace);
-        $fullClass      = $this->getFullClass($class);
-        $path           = $this->getSourcePath().'/Carbon/'.str_replace('\\', DIRECTORY_SEPARATOR, $shortNamespace);
-
-        $io->table(
-            ['name', 'val'],
-            [
-                ['$title', $title],
-                ['$shortNamespace', $shortNamespace],
-                ['$namespace', $namespace],
-                ['$class', $class],
-                ['$fullClass', $fullClass],
-                ['$path', $path],
-            ]
+        $this->setSourcePath(
+            $this->getBasePath().DIRECTORY_SEPARATOR.$this->getConfigs()[ 'src' ].DIRECTORY_SEPARATOR.'Carbon'
         );
+        //        $this->fileClassExist()
+        //        $this->saveClass();
+        dump($this->getConfigs(),);
+        dump($this->getPathToSave());
 
+        //        $this->setSourcePath($this->getConfigs()[ 'src' ]);
+        //        $this->saveClass($class);
 
-        $namespace = new PhpNamespace($namespace);
-        $namespace->addUse(CarbonBaseContainer::class, 'CarbonBaseContainer');
-        $namespace->addUse(Field::class);
-        $namespace->addUse(Container::class);
-        //$namespace->addUse(ContainerType::class);
+        die($class);
+        /*
+                $path = $this->getSourcePath().'/Command/'.$this->getFullClass($name).'.php';
+                $fs   = new Filesystem();
+                if ($fs->exists($path)) {
+                    throw new Exception(sprintf('File "%s" exist', $path));
+                }
 
-        $class = $namespace->addClass($fullClass);
-        $class->addExtend(Container::class);
-
-        //        ask('sdfsdf',['sdf','sdf','sdf','sdf','sdf','sdf']);
-
-
-        $outputClass = '<?php'.PHP_EOL.$namespace;
-        echo $outputClass;
-        die();
-        $namespace = $this->getNamespace();
-
-
-        $class = $namespace->addClass($this->getFullClass($name));
-        $class->addExtend(Command::class)
-              ->addConstant('COMMAND', $name);
-        $method = $class->addMethod('__construct');
-        $method->setBody('parent::__construct(static::COMMAND);');
-
-        $method = $class->addMethod('configure');
-        $method->setBody('//todo: configure your command');
-
-        $method = $class->addMethod('execute');
-        $method->addParameter('input')
-               ->setTypeHint(InputInterface::class);
-        $method->addParameter('output')
-               ->setTypeHint(OutputInterface::class);
-        $method->setBody(
-            '
-        $io = new SymfonyStyle($input, $output);
-    try {
-        
-        //todo: write your code
-        
-    } catch (Exception $exception) {
-        $io->error($exception->getMessage());
-    }'
-        );
-
-        $path = $this->getSourcePath().'/Command/'.$this->getFullClass($name).'.php';
-        $fs   = new Filesystem();
-        if ($fs->exists($path)) {
-            throw new Exception(sprintf('File "%s" exist', $path));
-        }
-
-        $fs->appendToFile($path, '<?php '.PHP_EOL);
-        $fs->appendToFile($path, $namespace);
-        $io->success(sprintf('Command \'%s\' is create', $name));
-    }
-
-    private function getBlockName(SymfonyStyle $io)
-    {
-        if ($name = $io->ask('Enter block class', "Test\CustomBlock")) {
-            return $name;
-        } else {
-            return $this->getBlockName($io);
-        }
-    }
-
-    public function getClass(array $tmp)
-    {
-        $tmp  = array_pop($tmp);
-        $name = ChangeCase::pascal($tmp);
-
-        $isValidName = preg_match('/^([a-zA-Z].+)Container$/', $name, $match);
-        if ($isValidName) {
-            return $match[ '1' ];
-        }
-
-        return $name;
-    }
-
-    public function getFullClass(string $class)
-    {
-        return $class.'Container';
-    }
-
-    private function getNamespace(string $shortNamespace)
-    {
-        return $this->getConfigs()[ 'namespace' ].'Carbon\\'.$shortNamespace;
-    }
-
-    private function getShortNamespace(array $tpl)
-    {
-        array_pop($tpl);
-
-        return implode('\\', $tpl);
+                $fs->appendToFile($path, '<?php '.PHP_EOL);
+                $fs->appendToFile($path, $namespace);
+                $style->success(sprintf('Command \'%s\' is create', $name));*/
     }
 
     /**
      *
      * Method for generate class or namespace
      *
+     *
+     * @param StyleInterface $style
+     *
      * @return string
+     * @throws BaseCoreException
      */
-    public function generate(): string
+    public function generate(StyleInterface $style): string
     {
-        return
+
+        $namespace = new PhpNamespace($this->getFullNamespace());
+        $namespace->addUse(CarbonBaseContainer::class, 'CarbonBaseContainer');
+        $namespace->addUse(Field::class);
+        $namespace->addUse(Container::class);
+
+        $class = $namespace->addClass($this->getClass().'Container');
+        $class->addExtend(Container::class);
+
+        ### Setup type ###
+        $types = [
+            ContainerType::THEME_OPTIONS => 'Theme options container',
+            ContainerType::POST_META     => 'Container for posts',
+            ContainerType::TERM_META     => 'Container for terms',
+            ContainerType::COMMENT_META  => 'Container for comments',
+            ContainerType::NAV_MENU_ITEM => 'Container for menu items',
+            ContainerType::USER_META     => 'Container for users',
+        ];
+        $type  = $style->choice('Choice type container', $types);
+        $class->addMethod('getType')
+              ->setComment($types[ $type ])
+              ->setReturnType('string')
+              ->setBody(sprintf('return \'%s\';', $type));
+        ### End ###
+
+        ### Setup title ###
+        $title = $style->ask('Enter title');
+        if ( ! $title) {
+            $style->warning('Skip!');
+            die();
+        }
+        $class->addMethod('getTitle')
+              ->setReturnType('string')
+              ->setBody(sprintf('return \'%s\';', $title));
+        ### End ###
+
+        ### Setup type ###
+        $class->addMethod('getFields')
+              ->setReturnType('array')
+              ->setBody('return [];');
+        ### End ###
+
+        $outputClass = '<?php'.PHP_EOL.$namespace;
+
+        return $outputClass;
     }
 }

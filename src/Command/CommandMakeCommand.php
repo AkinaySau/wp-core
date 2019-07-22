@@ -11,12 +11,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
 class CommandMakeCommand extends AbstractMakeCommand
 {
-    use MakeTrait;
     protected static $defaultName = 'make:command';
 
     protected function configure()
@@ -25,10 +25,10 @@ class CommandMakeCommand extends AbstractMakeCommand
              ->addOption('name', null, InputArgument::REQUIRED, 'Block name', null);
     }
 
-    protected function make(InputInterface $input, OutputInterface $output, SymfonyStyle $io)
+    protected function make(InputInterface $input, OutputInterface $output, StyleInterface $style)
     {
         if ( ! $name = $input->getOption('name')) {
-            $name = $this->getBlockName($io);
+            $name = $this->getBlockName($style);
         }
         $namespace = $this->getNamespace();
         $name      = strtolower($name);
@@ -76,10 +76,10 @@ class CommandMakeCommand extends AbstractMakeCommand
 
         $fs->appendToFile($path, '<?php '.PHP_EOL);
         $fs->appendToFile($path, $namespace);
-        $io->success(sprintf('Command \'%s\' is create', $name));
+        $style->success(sprintf('Command \'%s\' is create', $name));
     }
 
-    private function getBlockName(SymfonyStyle $input)
+    private function getBlockName(StyleInterface $input)
     {
         if ($name = $input->ask('Enter command name', "custom:name")) {
             return $name;
