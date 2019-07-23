@@ -18,8 +18,18 @@ class WP
      */
     private $container;
 
+    /**
+     * Translation domain
+     * @var string
+     */
+    private static $domain;
+
     public function __construct(ContainerInterface $container, WPCollector $collector)
     {
+        self::$domain = $collector->getConfig('translation_domain');
+dump($collector->getConfig('translation_domain'));
+        die();
+        dump(self::$domain);
         $this->collector = $collector;
         $this->container = $container;
         $this->registerActions();
@@ -31,6 +41,14 @@ class WP
             $this->container->get($id)
                             ->action();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public static function getDomain()
+    {
+//        return self::$domain;
     }
 
     public function registerPostTypes()

@@ -13,16 +13,35 @@ class Menu implements ActionInterface
      * @var array|null
      */
     private $menus;
+    /**
+     * @var array|null
+     */
+    private $domain;
 
-    public function __construct(?array $menus)
+    /**
+     * @return array|null
+     */
+    public function getMenus(): ?array
     {
-        if ($menus)
-        $this->menus = $menus;
+        return $this->menus;
+    }
+    public function __construct()
+    {
+        dump(WP::getDomain());
+//        $this->menus = $menus;
+//        $this->domain = $domain;
+    }
 
+    setup /**
+ * @param array|null $menus
+ */
+    public function setMenus(?array $menus): void
+    {
+        $this->menus = $menus;
     }
 
     function action()
-    {
+    {/*
         if (count($this->menus)) {
             add_action(
                 'after_setup_theme',
@@ -30,6 +49,6 @@ class Menu implements ActionInterface
                     register_nav_menus($this->menus);
                 }
             );
-        }
+        }*/
     }
 }

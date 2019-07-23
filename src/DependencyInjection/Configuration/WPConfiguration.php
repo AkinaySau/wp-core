@@ -21,10 +21,10 @@ class WPConfiguration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('wp');
         $rootNode    = $treeBuilder->getRootNode();
 
-        $rootNode->children()
-                 ->end();
+
 
         $this->registerMenuConfig($rootNode);
+        $this->registerTranslationConfig($rootNode);
 
         return $treeBuilder;
     }
@@ -33,9 +33,32 @@ class WPConfiguration implements ConfigurationInterface
     {
         $rootNode->children()
                      ->arrayNode('menu')
-                         ->scalarPrototype()
+                        ->info('Register new menu position use "register_nav_menus"')
+                        ->scalarPrototype()
                      ->end()
                  ->end()
         ;
+    }
+
+    private function registerTranslationConfig(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode->children()
+                     ->arrayNode('translation')
+                        ->children()
+//                            ->scalarNode('domain')
+//                                ->info('Constant for use in translate "__(), _e(), ..."')
+//                                ->isRequired()
+//                                ->validate()
+//                                    ->ifTrue(function ($var){
+//                                        return !is_string($var);
+//                                    })
+//                                    ->thenInvalid('must be string')
+//                                ->end()
+//                            ->end()
+//                            ->scalarNode('path')
+
+                        ->end()
+                     ->end()
+                 ->end();
     }
 }

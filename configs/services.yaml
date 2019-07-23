@@ -34,5 +34,5 @@ services:
     Sau\WP\Core\WP\WP:
         arguments: ['@service_container','@wp_collector']
     wp:
-        alias: Sau\WP\Core\Console\Console
+        alias: Sau\WP\Core\WP\WP
         public: true

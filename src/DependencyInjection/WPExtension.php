@@ -42,8 +42,10 @@ class WPExtension extends Extension implements CompilerPassInterface
         $configuration = new WPConfiguration();
         $configs       = $this->processConfiguration($configuration, $configs);
         $this->configs = $configs;
-
+        dump($configs);
+        $container->setParameter('translation_domain', $configs[ 'translation_domain' ]);
         $container->registerForAutoconfiguration(ActionInterface::class)
+                  ->setPublic(true)
                   ->addTag('wp.actions');
     }
 
@@ -56,7 +58,7 @@ class WPExtension extends Extension implements CompilerPassInterface
      */
     public function getAlias()
     {
-        return 'initialize';
+        return 'wp';
     }
 
 }
