@@ -26,10 +26,7 @@ class WP
 
     public function __construct(ContainerInterface $container, WPCollector $collector)
     {
-        self::$domain = $collector->getConfig('translation_domain');
-dump($collector->getConfig('translation_domain'));
-        die();
-        dump(self::$domain);
+
         $this->collector = $collector;
         $this->container = $container;
         $this->registerActions();
@@ -48,7 +45,7 @@ dump($collector->getConfig('translation_domain'));
      */
     public static function getDomain()
     {
-//        return self::$domain;
+        //        return self::$domain;
     }
 
     public function registerPostTypes()
