@@ -23,6 +23,8 @@ abstract class Container implements ContainerInterface
 
     abstract public function getTitle(): string;
 
+    abstract public function getFields(): array;
+
     /**
      * @var CarbonBaseContainer
      */
@@ -37,6 +39,7 @@ abstract class Container implements ContainerInterface
     public function init(): void
     {
         $container = CarbonBaseContainer::factory($this->getType(), $this->getContainerID(), $this->getTitle());
+        $container->add_fields($this->getFields());
         $this->configure($container);
         $this->container = $container;
     }

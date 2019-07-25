@@ -42,8 +42,7 @@ abstract class GutenbergBlock extends Container
                 echo $this->twig->render($this->getTemplate(), $fields);
             }
         )
-                        ->set_preview_mode($this->getPreviewMod())
-                        ->add_fields($this->getFields());
+                        ->set_preview_mode($this->getPreviewMod());
     }
 
     /**
