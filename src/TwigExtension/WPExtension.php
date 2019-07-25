@@ -51,6 +51,7 @@ class WPExtension extends AbstractExtension
             new TwigFunction('get_post_thumbnail_url', 'get_the_post_thumbnail_url'),
             new TwigFunction('get_post_permalink', 'get_post_permalink'),
             new TwigFunction('get_the_title', 'get_the_title'),
+            new TwigFunction('get_the_ID', 'get_the_ID'),
 
 
             /**
