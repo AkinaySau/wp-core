@@ -35,13 +35,7 @@ abstract class GutenbergBlock extends Container
     final public function init(): void
     {
         parent::init();
-        $this->container->set_render_callback(
-            function ($fields, $attributes, $inner_blocks) {
-                //todo: add inner_blocks
-                $fields[ 'inner_blocks' ] = $inner_blocks;
-                echo $this->twig->render($this->getTemplate(), $fields);
-            }
-        )
+        $this->container->set_render_callback([$this, 'render'])
                         ->set_preview_mode($this->getPreviewMod());
     }
 
@@ -58,5 +52,12 @@ abstract class GutenbergBlock extends Container
     protected function getPreviewMod(): bool
     {
         return false;
+    }
+
+    public function render($fields, $attributes, $inner_blocks)
+    {
+        //todo: add inner_blocks
+        $fields[ 'inner_blocks' ] = $inner_blocks;
+        echo $this->twig->render($this->getTemplate(), $fields);
     }
 }
