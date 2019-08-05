@@ -8,6 +8,12 @@ services:
         resource: '../src/*'
         exclude: '../src/{Kernel.php,Twig/TwigEngine.php,Carbon/Carbon.php}'
     #Twig
+    Sau\WP\Core\Twig\TwigEngine:
+        public: false
+        arguments: ['@service_container','@twig_collector']
+    twig_engine:
+        alias: Sau\WP\Core\Twig\TwigEngine
+
     Sau\WP\Core\Twig\Twig:
         public: false
         arguments: ['@twig_engine']

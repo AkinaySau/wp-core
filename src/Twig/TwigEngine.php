@@ -4,6 +4,8 @@
 namespace Sau\WP\Core\Twig;
 
 
+use Sau\WP\Core\DependencyInjection\Collector\TwigCollector;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
@@ -25,10 +27,21 @@ final class TwigEngine
      * @var array
      */
     private $extensions;
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+    /**
+     * @var TwigCollector
+     */
+    private $collector;
 
-    public function __construct(array $configs)
+    public function __construct(ContainerInterface $container, TwigCollector $collector)
     {
-        $this->configs = $configs;
+        $this->container  = $container;
+        $this->collector  = $collector;
+        $this->configs    = $collector->getConfigs();
+        $this->extensions = $collector->getExtensions();
     }
 
     public function registerExtensions()
@@ -36,8 +49,12 @@ final class TwigEngine
         if ($this->isRegisteredExtensions) {
             return;
         }
-        foreach ($this->extensions as $class => $extension) {
-            $this->environment->addExtension(new $class);
+        if ($this->container) {
+            foreach ($this->extensions as $class => $extension) {
+                if ($this->container->has($class)) {
+                    $this->environment->addExtension($this->container->get($class));
+                }
+            }
         }
         $this->isRegisteredExtensions = true;
     }
@@ -86,6 +103,13 @@ final class TwigEngine
     public function setExtensions(array $extensions)
     {
         $this->extensions = $extensions;
+
+        return $this;
+    }
+
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
 
         return $this;
     }
