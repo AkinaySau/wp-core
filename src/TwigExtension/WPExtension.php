@@ -52,6 +52,10 @@ class WPExtension extends AbstractExtension
             new TwigFunction('get_post_permalink', 'get_post_permalink'),
             new TwigFunction('get_the_title', 'get_the_title'),
             new TwigFunction('get_the_ID', 'get_the_ID'),
+            new TwigFunction('get_term', 'get_term'),
+            new TwigFunction('paginate_links', 'paginate_links'),
+            new TwigFunction('get_term_link', 'get_term_link'),
+            new TwigFunction('wp_get_post_terms', 'wp_get_post_terms'),
 
 
             /**
@@ -75,7 +79,10 @@ class WPExtension extends AbstractExtension
 
             /**
              * Attachment
-             */ new TwigFunction('wp_attach_img_src', 'wp_get_attachment_image_url'),
+             */
+            new TwigFunction('wp_attach_img_src', 'wp_get_attachment_image_url'),
+            new TwigFunction('wp_attach_img_src', 'wp_get_attachment_image_url'),
+            new TwigFunction('wp_attach_img_src', 'wp_get_attachment_image_url'),
             new TwigFunction('wp_get_attachment_link', 'wp_get_attachment_link'),
             new TwigFunction('wp_get_attachment_url', 'wp_get_attachment_url'),
 
