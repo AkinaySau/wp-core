@@ -13,18 +13,14 @@ use ChangeCase\ChangeCase;
 use ReflectionClass;
 use ReflectionException;
 
+/**
+ * Class Container
+ * @package Sau\WP\Core\Carbon
+ * @todo Add function for get prefix
+ * @todo Need function for add field name prefix
+ */
 abstract class Container implements ContainerInterface
 {
-    /**
-     * @return string
-     * @see ContainerType for get types
-     */
-    abstract public function getType(): string;
-
-    abstract public function getTitle(): string;
-
-    abstract public function getFields(): array;
-
     /**
      * @var CarbonBaseContainer
      */

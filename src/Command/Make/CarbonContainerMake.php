@@ -9,6 +9,7 @@ use Carbon_Fields\Field;
 use Nette\PhpGenerator\PhpNamespace;
 use Sau\WP\Core\Carbon\Container;
 use Sau\WP\Core\Carbon\ContainerType;
+use Sau\WP\Core\Carbon\DataTrait;
 
 class CarbonContainerMake extends AbstractMakeNamespace
 {
@@ -28,6 +29,7 @@ class CarbonContainerMake extends AbstractMakeNamespace
 
         $class = $namespace->addClass($class);
         $class->addExtend(Container::class);
+        $class->addTrait(DataTrait::class);
 
         ### Setup type ###
         $types = [
