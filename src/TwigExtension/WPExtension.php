@@ -77,20 +77,14 @@ class WPExtension extends AbstractExtension
              */ new TwigFunction('wp_head', 'wp_head'),
             new TwigFunction('get_header', 'get_header'),
 
-            /**
-             * Attachment
-             */
-            new TwigFunction('wp_attach_img_src', 'wp_get_attachment_image_url'),
-            new TwigFunction('wp_attach_img_src', 'wp_get_attachment_image_url'),
-            new TwigFunction('wp_attach_img_src', 'wp_get_attachment_image_url'),
-            new TwigFunction('wp_get_attachment_link', 'wp_get_attachment_link'),
-            new TwigFunction('wp_get_attachment_url', 'wp_get_attachment_url'),
+
 
             /**
              * Trash
              */
 
             new TwigFunction('ln_attributes', 'language_attributes'),
+            new TwigFunction('is_front_page', 'is_front_page'),
 
             /**
              * Nonce
