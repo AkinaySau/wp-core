@@ -6,6 +6,7 @@ namespace Sau\WP\Core\ShortCode;
 
 use ChangeCase\ChangeCase;
 use ReflectionClass;
+use ReflectionException;
 use Sau\WP\Core\DependencyInjection\WPExtension\ActionInterface;
 use Sau\WP\Core\Twig\Twig;
 
@@ -26,8 +27,8 @@ abstract class AbstractShortCode implements ActionInterface
         try {
             $reflect    = new ReflectionClass($this);
             $this->name = ChangeCase::kebab($reflect->getShortName());
-        } catch (\ReflectionException $e) {
-
+        } catch (ReflectionException $e) {
+            $this->name = ChangeCase::kebab(get_class($this));
         }
         $this->twig = $twig;
     }
@@ -64,10 +65,10 @@ abstract class AbstractShortCode implements ActionInterface
     }
 
     /**
-     * @param Twig $twig
+     * @return Twig
      */
-    public function setTwig(Twig $twig): void
+    public function getTwig(): Twig
     {
-        $this->twig = $twig;
+        return $this->twig;
     }
 }
