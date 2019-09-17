@@ -6,6 +6,7 @@ namespace Sau\WP\Core\ShortCode;
 
 use ReflectionClass;
 use Sau\WP\Core\DependencyInjection\WPExtension\ActionInterface;
+use Sau\WP\Core\Twig\Twig;
 
 abstract class AbstractShortCode implements ActionInterface
 {
@@ -14,8 +15,12 @@ abstract class AbstractShortCode implements ActionInterface
      * @var string
      */
     private $name;
+    /**
+     * @var Twig
+     */
+    private $twig;
 
-    public function __construct()
+    public function __construct(Twig $twig)
     {
         try {
             $reflect    = new ReflectionClass($this);
@@ -23,6 +28,7 @@ abstract class AbstractShortCode implements ActionInterface
         } catch (\ReflectionException $e) {
 
         }
+        $this->twig = $twig;
     }
 
     final public function action()
@@ -53,5 +59,13 @@ abstract class AbstractShortCode implements ActionInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @param Twig $twig
+     */
+    public function setTwig(Twig $twig): void
+    {
+        $this->twig = $twig;
     }
 }
