@@ -4,6 +4,7 @@
 namespace Sau\WP\Core\ShortCode;
 
 
+use ChangeCase\ChangeCase;
 use ReflectionClass;
 use Sau\WP\Core\DependencyInjection\WPExtension\ActionInterface;
 use Sau\WP\Core\Twig\Twig;
@@ -24,7 +25,7 @@ abstract class AbstractShortCode implements ActionInterface
     {
         try {
             $reflect    = new ReflectionClass($this);
-            $this->name = $reflect->getShortName();
+            $this->name = ChangeCase::kebab($reflect->getShortName());
         } catch (\ReflectionException $e) {
 
         }
@@ -33,6 +34,7 @@ abstract class AbstractShortCode implements ActionInterface
 
     final public function action()
     {
+        //fix for console
         if (function_exists('add_shortcode')) {
             add_shortcode($this->name, [$this, 'execute']);
         }
