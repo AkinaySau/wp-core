@@ -21,14 +21,6 @@ services:
         alias: Sau\WP\Core\Twig\Twig
         public: true
 
-    #Carbon
-    Sau\WP\Core\Carbon\Carbon:
-        public: false
-        arguments: ['@service_container','@carbon_collector','@twig']
-    carbon:
-        alias: Sau\WP\Core\Carbon\Carbon
-        public: true
-
     #Console
     Sau\WP\Core\Console\Console:
         arguments: ['@service_container','@console_collector']
@@ -42,3 +34,11 @@ services:
     wp:
         alias: Sau\WP\Core\WP\WP
         public: true
+
+    #Carbon
+    #Sau\WP\Core\Carbon\Carbon:
+    #    public: false
+    #    arguments: ['@service_container','@carbon_collector','@twig']
+    #carbon:
+    #    alias: Sau\WP\Core\Carbon\Carbon
+    #    public: true
