@@ -25,6 +25,7 @@ class MakeCarbonGutenbergCommand extends AbstractMakeCommand
         $fs      = new Filesystem();
         $absPath = $this->getContainer()
                         ->getParameter('path.views').DIRECTORY_SEPARATOR.$containerBuilder->getTemplate();
+        $absPath = str_replace('//', '/', $absPath);
         if ( ! $fs->exists($absPath)) {
             $fs->appendToFile($absPath, '{# Create AkinaySau(akinaysau@gmail.com) #}');
         }
