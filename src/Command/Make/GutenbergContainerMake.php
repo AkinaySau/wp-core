@@ -19,6 +19,10 @@ class GutenbergContainerMake extends AbstractMakeNamespace
      * @var string
      */
     private $template;
+    /**
+     * @var array
+     */
+    private $fields;
 
     /**
      * @return string
@@ -68,7 +72,8 @@ class GutenbergContainerMake extends AbstractMakeNamespace
         $generator = new Generator($this->getStyle());
         $generator->start();
 
-        $fields = $generator->getFields();
+        $fields      = $generator->getFields();
+        $this->fields = $generator->getFieldNames();
 
         $class->addMethod('getFields')
               ->setReturnType('array')
@@ -108,5 +113,13 @@ class GutenbergContainerMake extends AbstractMakeNamespace
         $this->template = 'block/'.implode(DIRECTORY_SEPARATOR, $namespace).DIRECTORY_SEPARATOR.ChangeCase::kebab(
                 $class
             ).'.html.twig';
+    }
+
+    /**
+     * @return array
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
     }
 }
