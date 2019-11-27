@@ -10,6 +10,7 @@ use ChangeCase\ChangeCase;
 use Nette\PhpGenerator\PhpNamespace;
 use Sau\WP\Core\Carbon\Container;
 use Sau\WP\Core\Carbon\ContainerType;
+use Sau\WP\Core\Carbon\Generator;
 use Sau\WP\Core\Carbon\GutenbergBlock;
 
 class GutenbergContainerMake extends AbstractMakeNamespace
@@ -64,9 +65,14 @@ class GutenbergContainerMake extends AbstractMakeNamespace
         ### End ###
 
         ### Setup type ###
+        $generator = new Generator($this->getStyle());
+        $generator->start();
+
+        $fields = $generator->getFields();
+
         $class->addMethod('getFields')
               ->setReturnType('array')
-              ->setBody('return [];');
+              ->setBody(sprintf('return [%s];', $fields));
 
         ### End ###
 

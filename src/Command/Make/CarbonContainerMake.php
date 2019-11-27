@@ -10,6 +10,7 @@ use Nette\PhpGenerator\PhpNamespace;
 use Sau\WP\Core\Carbon\Container;
 use Sau\WP\Core\Carbon\ContainerType;
 use Sau\WP\Core\Carbon\DataTrait;
+use Sau\WP\Core\Carbon\Generator;
 
 class CarbonContainerMake extends AbstractMakeNamespace
 {
@@ -64,10 +65,15 @@ class CarbonContainerMake extends AbstractMakeNamespace
               ->setBody(sprintf('return \'%s\';', $title));
         ### End ###
 
-        ### Setup type ###
+        ### Setup fields ###
+        $generator = new Generator($this->getStyle());
+        $generator->start();
+
+        $fields = $generator->getFields();
+
         $class->addMethod('getFields')
               ->setReturnType('array')
-              ->setBody('return [];');
+              ->setBody(sprintf('return [%s];', $fields));
 
         ### End ###
 
