@@ -53,6 +53,7 @@ class WPExtension extends AbstractExtension
             new TwigFunction('get_the_title', 'get_the_title'),
             new TwigFunction('get_the_ID', 'get_the_ID'),
             new TwigFunction('get_term', 'get_term'),
+            new TwigFunction('get_the_date', 'get_the_date'),
             new TwigFunction('paginate_links', 'paginate_links'),
             new TwigFunction('get_term_link', 'get_term_link'),
             new TwigFunction('wp_get_post_terms', 'wp_get_post_terms'),
