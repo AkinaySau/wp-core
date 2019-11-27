@@ -29,7 +29,7 @@ class MakeCarbonGutenbergCommand extends AbstractMakeCommand
         if ( ! $fs->exists($absPath)) {
             $fs->appendToFile($absPath, '{# Create AkinaySau(akinaysau@gmail.com) #}');
             foreach ($containerBuilder->getFields() as $field) {
-                $fs->appendToFile($absPath, sprintf('{{ dump(%s) }}', $field));
+                $fs->appendToFile($absPath, sprintf("\n{{ dump(%s) }}", $field));
             }
         }
     }
