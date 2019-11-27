@@ -48,7 +48,7 @@ class Generator
                 FieldTypes::getTypes(),
                 FieldTypes::TYPE_TEXT
             );
-            $label = $this->io->ask('Label', $old_name);
+            $label = $this->io->ask('Label', ChangeCase::upperFirst($old_name));
 
             $this->addField($name, $type, $label);
 
@@ -100,7 +100,7 @@ class Generator
         endswitch;
 
         $this->fields[ $name ] = $field;
-        $this->io->success(sprintf("Added file [%s]", $name));
+        $this->io->success(sprintf("Added field [%s]", $name));
     }
 
     /**
