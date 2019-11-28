@@ -198,7 +198,7 @@ class Generator
         if ($mime = $this->io->ask("Enter MIME-type")) {
             $field .= sprintf('->set_type( "%s" )', $mime);
         }
-        $field .= '->set_value_type( "url" )';
+        //$field .= '->set_value_type( "url" )';
         $field .= '->set_width( 10 )';
     }
 
