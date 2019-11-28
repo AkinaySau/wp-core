@@ -41,5 +41,6 @@ class CacheClearCommand extends Command
             $io->error($exception->getMessage());
         }
 
+        return 0;
     }
 }

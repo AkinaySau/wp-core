@@ -51,6 +51,7 @@ abstract class AbstractMakeCommand extends Command
             $io->error($exception->getMessage());
         }
 
+        return 0;
     }
 
     abstract protected function make(InputInterface $input, OutputInterface $output, StyleInterface $style);
