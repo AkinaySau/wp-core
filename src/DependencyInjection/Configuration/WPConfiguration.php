@@ -25,6 +25,7 @@ class WPConfiguration implements ConfigurationInterface
 
         $this->registerMenuConfig($rootNode);
         $this->registerTranslationConfig($rootNode);
+        $this->registerMedia($rootNode);
 
         return $treeBuilder;
     }
@@ -60,5 +61,34 @@ class WPConfiguration implements ConfigurationInterface
                         ->end()
                      ->end()
                  ->end();
+    }
+
+    private function registerMedia(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode->children()
+                ->arrayNode('media')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('name')
+                                ->isRequired()
+                            ->end()
+                            ->integerNode('width')
+                                ->min(1)
+                                ->isRequired()
+                                ->defaultValue(1)
+                            ->end()
+                            ->integerNode('height')
+                                ->min(1)
+                                ->isRequired()
+                                ->defaultValue(1)
+                            ->end()
+                            ->scalarNode('crop')
+                                ->defaultValue('asd')
+                            ->end()
+                            ->scalarNode('media_name')->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
     }
 }
