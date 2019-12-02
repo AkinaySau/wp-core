@@ -72,10 +72,6 @@ class Generator
      */
     public function addField(string $name, string $type, string $label): void
     {
-        if (defined('THEME_LANG')) {
-            $label = sprintf('__( "%s", THEME_LANG )', $label);
-        }
-
         $field = sprintf($this->getFieldPattern(), $type, $name, $label);
         if ($this->io->confirm('Is required?', false)) {
             $field .= '->set_required()';
@@ -131,7 +127,11 @@ class Generator
      */
     protected function getFieldPattern()
     {
-        return 'Field::make("%s", "%s", "%s")';
+        if (defined('THEME_LANG')) {
+            return 'Field::make("%s", "%s", __( "%s", THEME_LANG ))';
+        } else {
+            return 'Field::make("%s", "%s", "%s")';
+        }
     }
 
     private function extComplex(string &$field, string $name)
