@@ -60,7 +60,7 @@ class CarbonContainerMake extends AbstractMakeNamespace
             $configure = $class->addMethod('configure');
 
             $configure->addParameter('container')
-                      ->setType('CarbonBaseContainer');
+                      ->setType(CarbonBaseContainer::class);
             $namespace->addUse(CarbonBaseContainer::class, 'CarbonBaseContainer');
             switch ($type):
                 case ContainerType::THEME_OPTIONS:
@@ -81,7 +81,7 @@ class CarbonContainerMake extends AbstractMakeNamespace
             endswitch;
 
             $logic = '$container->'.$type->build()
-                                         ->getLogic();
+                                         ->getLogic().';';
             $configure->setBody($logic);
         }
         ### End ###
