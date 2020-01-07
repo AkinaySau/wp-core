@@ -4,6 +4,8 @@
 namespace Sau\WP\Core\DependencyInjection\Collector;
 
 
+use WP_REST_Controller;
+
 class WPCollector
 {
     /**
@@ -14,6 +16,11 @@ class WPCollector
      * @var array|null
      */
     private $actions;
+
+    /**
+     * @var WP_REST_Controller[]
+     */
+    private $rest;
 
     public function __construct(array $configs, ?array $actions)
     {
@@ -49,5 +56,25 @@ class WPCollector
     public function getActions(): ?array
     {
         return $this->actions;
+    }
+
+    /**
+     * @return WP_REST_Controller[]
+     */
+    public function getRest()
+    {
+        return $this->rest;
+    }
+
+    /**
+     * @param WP_REST_Controller[] $rest
+     *
+     * @return WPCollector
+     */
+    public function setRest($rest): self
+    {
+        $this->rest = $rest;
+
+        return $this;
     }
 }

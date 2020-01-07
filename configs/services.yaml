@@ -36,9 +36,9 @@ services:
         public: true
 
     #Carbon
-    #Sau\WP\Core\Carbon\Carbon:
-    #    public: false
-    #    arguments: ['@service_container','@carbon_collector','@twig']
-    #carbon:
-    #    alias: Sau\WP\Core\Carbon\Carbon
-    #    public: true
+    Sau\WP\Core\Carbon\Carbon:
+        public: false
+        arguments: ['@service_container','@carbon_collector','@twig']
+    carbon:
+        alias: Sau\WP\Core\Carbon\Carbon
+        public: true

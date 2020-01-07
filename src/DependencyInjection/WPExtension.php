@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use WP_REST_Controller;
 
 class WPExtension extends Extension implements CompilerPassInterface
 {
@@ -27,6 +28,9 @@ class WPExtension extends Extension implements CompilerPassInterface
     {
         $actions    = $container->findTaggedServiceIds('wp.actions');
         $definition = new Definition(WPCollector::class, [$this->configs, $actions]);
+        $rest    = $container->findTaggedServiceIds('wp.rest');
+        $definition->addMethodCall('setRest',[$rest]);
+
         $container->setDefinition('wp_collector', $definition);
         $this->menu($container);
     }
@@ -49,6 +53,9 @@ class WPExtension extends Extension implements CompilerPassInterface
         $container->registerForAutoconfiguration(ActionInterface::class)
                   ->setPublic(true)
                   ->addTag('wp.actions');
+        $container->registerForAutoconfiguration(WP_REST_Controller::class)
+                  ->setPublic(true)
+                  ->addTag('wp.rest');
     }
 
     /**

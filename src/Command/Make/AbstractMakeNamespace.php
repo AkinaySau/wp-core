@@ -5,6 +5,7 @@ namespace Sau\WP\Core\Command\Make;
 
 
 use Nette\PhpGenerator\PhpNamespace;
+use Nette\PhpGenerator\PsrPrinter;
 use Sau\WP\Core\Exceptions\ConfigurationSettingsNotFoundException;
 use Sau\WP\Core\Exceptions\Console\FileClassExistException;
 use Sau\WP\Core\Exceptions\Console\MakeNamespaceException;
@@ -57,7 +58,10 @@ abstract class AbstractMakeNamespace extends AbstractMake
         if ( ! $rewrite && $this->fs->exists($fullPath)) {
             throw new FileClassExistException($className);
         }
-        $this->fs->appendToFile($fullPath, '<?php '.PHP_EOL.$this->namespace);
+        $printer   = new PsrPrinter();
+        $namespace = $printer->printNamespace($this->namespace);
+
+        $this->fs->appendToFile($fullPath, '<?php '.PHP_EOL.$namespace);
     }
 
     abstract protected function generate(): PhpNamespace;

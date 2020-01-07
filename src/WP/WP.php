@@ -30,6 +30,7 @@ class WP
         $this->collector = $collector;
         $this->container = $container;
         $this->registerActions();
+        $this->registerRest();
     }
 
     private function registerActions()
@@ -38,6 +39,20 @@ class WP
             $this->container->get($id)
                             ->action();
         }
+    }
+
+
+    private function registerRest()
+    {
+        add_action(
+            'rest_api_init',
+            function () {
+                foreach ($this->collector->getRest() as $id => $item) {
+                    $this->container->get($id)
+                                    ->register_routes();
+                }
+            }
+        );
     }
 
     /**

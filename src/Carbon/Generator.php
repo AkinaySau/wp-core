@@ -62,7 +62,7 @@ class Generator
      */
     public function getFields(): string
     {
-        return implode($this->fields, ",\n");
+        return implode(",\n",$this->fields);
     }
 
     /**
