@@ -2,6 +2,7 @@
 
 namespace Sau\WP\Core;
 
+use Dotenv\Dotenv;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -38,6 +39,10 @@ class Kernel
     {
         $this->base_path = $theme_dir;
         $this->debug     = $debug;
+
+        if (!isset($_SERVER['PLUGIN_VERSION'])) {
+                throw new \RuntimeException('PLUGIN_VERSION environment variable is not defined.');
+        }
 
         $this->checkInfrastructure();
         $this->container = $this->initContainer();
