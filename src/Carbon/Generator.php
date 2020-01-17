@@ -62,7 +62,7 @@ class Generator
      */
     public function getFields(): string
     {
-        return implode(",\n",$this->fields);
+        return implode(",\n", $this->fields);
     }
 
     /**
@@ -127,8 +127,8 @@ class Generator
      */
     protected function getFieldPattern()
     {
-        if (defined('THEME_LANG')) {
-            return 'Field::make("%s", "%s", __( "%s", THEME_LANG ))';
+        if (getenv('PLUGIN_TEXTDOMAIN')) {
+            return 'Field::make("%s", "%s", __( "%s", getenv(\'PLUGIN_TEXTDOMAIN\'))';
         } else {
             return 'Field::make("%s", "%s", "%s")';
         }

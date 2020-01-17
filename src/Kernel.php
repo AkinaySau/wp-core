@@ -40,8 +40,8 @@ class Kernel
         $this->base_path = $theme_dir;
         $this->debug     = $debug;
 
-        if (!isset($_SERVER['PLUGIN_VERSION'])) {
-                throw new \RuntimeException('PLUGIN_VERSION environment variable is not defined.');
+        if (function_exists('getenv') && ! getenv('TYPE')) {
+            throw new \RuntimeException('TYPE environment variable is not defined.');
         }
 
         $this->checkInfrastructure();
