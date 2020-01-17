@@ -3,7 +3,7 @@
 	"description": "Add twig, carbon and DI for your WP project(theme/plugin)",
 	"minimum-stability": "stable",
 	"license": "BSD-3-Clause",
-	"version": "1.0.13",
+	"version": "1.0.14",
 	"authors": [
 		{
 			"name": "Akinay Sau (Vladimir M)",
