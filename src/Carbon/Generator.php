@@ -128,7 +128,7 @@ class Generator
     protected function getFieldPattern()
     {
         if (getenv('PLUGIN_TEXTDOMAIN')) {
-            return 'Field::make("%s", "%s", __( "%s", getenv(\'PLUGIN_TEXTDOMAIN\'))';
+            return 'Field::make("%s", "%s", __( "%s", getenv(\'PLUGIN_TEXTDOMAIN\')))';
         } else {
             return 'Field::make("%s", "%s", "%s")';
         }
