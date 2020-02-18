@@ -10,6 +10,7 @@ use Nette\PhpGenerator\PhpNamespace;
 use Sau\WP\Core\Carbon\GutenbergBlock;
 use Sau\WP\Core\DependencyInjection\WPExtension\ActionInterface;
 use Sau\WP\Core\Option\AbstractPageOption;
+use Sau\WP\SettingsAPI\SettingsGroup;
 use WP_REST_Controller;
 use WP_REST_Response;
 
@@ -27,7 +28,8 @@ class OptionsMake extends AbstractMakeNamespace
         list($namespace, $class) = $this->parseNamespace($expectedClass);
         $namespace = new PhpNamespace($this->namespaceAbsolute($namespace));
 
-        $namespace->addUse(AbstractPageOption::class);
+        $namespace->addUse(AbstractPageOption::class)
+                  ->addUse(SettingsGroup::class);
 
         $class = $namespace->addClass($class);
         $class->addExtend(AbstractPageOption::class);
@@ -77,30 +79,45 @@ class OptionsMake extends AbstractMakeNamespace
         $class->addConstant('MENU_TITLE', $menuTitle);
         $class->addConstant('SLUG', $slug);
 
+        $settings = $this->getStyle()
+                         ->confirm("Add settings");
+
         $class->addMethod('page')
               ->addComment('Содержимое сраницы')
               ->setReturnType('void')
-              ->setBody('$this->setupSettingsBlock();');
+              ->setBody($settings ? '$this->setupSettingsBlock();' : 'echo static::PAGE_TITLE');
 
-        $class->addMethod('setupSettingsBlock')
-              ->setFinal(true)
-              ->setComment('Вывод блока настроек')
-              ->setVisibility('private')
-              ->setReturnType('void')
-              ->setBody(
-                  sprintf(
-                      '
-                      echo \'<form method="POST" action="options.php">\';
-                    settings_fields( %s );
-                    do_settings_sections( %1$s );
-                    submit_button();
-                      echo \'</form>\';
-              ',
-                      'static::SLUG'
-                  )
-              );
+        if ($settings) {
+            $class->addMethod('setupSettingsBlock')
+                  ->setFinal(true)
+                  ->setComment('Вывод блока настроек')
+                  ->setVisibility('private')
+                  ->setReturnType('void')
+                  ->setBody(
+                      sprintf(
+                          '
+                        echo \'<form method="POST" action="options.php">\';
+                        settings_fields( %s );
+                        do_settings_sections( %1$s );
+                        submit_button();
+                        echo \'</form>\';
+                        ',
+                          'static::SLUG'
+                      )
+                  );
 
-        return $namespace;
+            $class->addMethod('settings')
+                  ->setFinal(true)
+                  ->setBody(
+                      sprintf('
+                        $group_id=\'pages\';
+                        $group_title=\'Страницы\';
+                        $setting_group = new SettingsGroup($group_id,$group_title,%s);
+                        $setting_group->addField(new UrlField($id, $title));
+                      ','static::SLUG')
+                  );
+
+        }
     }
 
 }

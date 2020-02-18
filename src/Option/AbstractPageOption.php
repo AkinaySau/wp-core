@@ -18,6 +18,9 @@ abstract class AbstractPageOption implements ActionInterface
     public function action()
     {
         add_action('admin_menu', [$this, 'register']);
+        if (method_exists($this, 'settings')) {
+            $this->settings();
+        }
     }
 
     final public function register()
@@ -39,10 +42,11 @@ abstract class AbstractPageOption implements ActionInterface
      */
     public function getPageTitle(): string
     {
-        if (!defined('static::PAGE_TITLE')) {
-            $message = sprintf('Constant %s is not set in %s','PAGE_TITLE',static::class);
+        if ( ! defined('static::PAGE_TITLE')) {
+            $message = sprintf('Constant %s is not set in %s', 'PAGE_TITLE', static::class);
             throw new Exception($message);
         }
+
         return static::PAGE_TITLE;
     }
 
@@ -51,10 +55,11 @@ abstract class AbstractPageOption implements ActionInterface
      */
     public function getMenuTitle(): string
     {
-        if (!defined('static::MENU_TITLE')) {
-            $message = sprintf('Constant %s is not set in %s','MENU_TITLE',static::class);
+        if ( ! defined('static::MENU_TITLE')) {
+            $message = sprintf('Constant %s is not set in %s', 'MENU_TITLE', static::class);
             throw new Exception($message);
         }
+
         return static::MENU_TITLE;
     }
 
@@ -63,10 +68,11 @@ abstract class AbstractPageOption implements ActionInterface
      */
     public function getSlug(): string
     {
-        if (!defined('static::SLUG')) {
-            $message = sprintf('Constant %s is not set in %s','SLUG',static::class);
+        if ( ! defined('static::SLUG')) {
+            $message = sprintf('Constant %s is not set in %s', 'SLUG', static::class);
             throw new Exception($message);
         }
+
         return static::SLUG;
     }
 
